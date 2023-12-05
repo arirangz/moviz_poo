@@ -35,7 +35,8 @@ class PageController extends Controller
         ?controller=page&action=home
     */
     protected function home()
-    {
+    {   
+
 
         $this->render('page/home', [
             'test' => 555,

@@ -11,6 +11,7 @@ class User extends Entity
     protected ?string $password = '';
     protected ?string $first_name = '';
     protected ?string $last_name = '';
+    protected ?string $role = '';
 
     public function getId(): ?int
     {
@@ -72,6 +73,24 @@ class User extends Entity
         return $this;
     }
 
+    /**
+     * Get the value of role
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set the value of role
+     */
+    public function setRole(?string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
     /*
         Pourrait être déplacé dans une classe UserValidator
     */
@@ -121,7 +140,15 @@ class User extends Entity
     */
     public static function isUser(): bool
     {
-        return isset($_SESSION['user']);
+        return isset($_SESSION['user']) && $_SESSION['user']['role'] === 'user';
+    }
+
+    /*
+        Pourrait être déplacé dans une classe Security
+    */
+    public static function isAdmin(): bool
+    {
+        return isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin';
     }
 
     /*
@@ -131,5 +158,7 @@ class User extends Entity
     {
         return (isset($_SESSION['user']) && isset($_SESSION['user']['id'])) ? $_SESSION['user']['id']: false;
     }
+
+
 
 }
