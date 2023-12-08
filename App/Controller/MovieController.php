@@ -2,19 +2,17 @@
 
 namespace App\Controller;
 
-use App\Repository\UserRepository;
-use App\Entity\User;
+use App\Repository\MovieRepository;
 
-
-class UserController extends Controller
+class MovieController extends Controller
 {
     public function route(): void
     {
         try {
             if (isset($_GET['action'])) {
                 switch ($_GET['action']) {
-                    case 'register':
-                        $this->register();
+                    case 'show':
+                        $this->show();
                         break;
                     case 'delete':
                         // Appeler méthode delete()
@@ -32,40 +30,28 @@ class UserController extends Controller
             ]);
         }
     }
-  
-    protected function register()
+
+    protected function show()
     {
         try {
-            $errors = [];
-            $user = new User();
+            if (isset($_GET['id'])) {
+                // Récupérer le film avec le Repository
+                $movieRepository = new MovieRepository();
+                $id = (int)$_GET['id'];
+                $movie = $movieRepository->findOneById($id);
 
-            if (isset($_POST['saveUser'])) {
+                $this->render('movie/show', [
+                    'movie' => $movie,
+                ]);
+            } else {
+                throw new \Exception("L'id est manquant en paramètre d'url");
                 
-                $user->hydrate($_POST);
-                $user->setRole(ROLE_USER);
-
-                $errors = $user->validate();
-
-                if (empty($errors)) {
-                    $userRepository = new UserRepository();
-                    
-                    $userRepository->persist($user);
-                    header('Location: index.php?controller=auth&action=login');
-                }
             }
-
-            $this->render('user/add_edit', [
-                'user' => '',
-                'pageTitle' => 'Inscription',
-                'errors' => $errors
-            ]);
 
         } catch (\Exception $e) {
             $this->render('errors/default', [
                 'error' => $e->getMessage()
             ]);
         } 
-
     }
-
 }

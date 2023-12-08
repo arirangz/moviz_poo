@@ -23,6 +23,10 @@ class Controller
                         $controller = new UserController();
                         $controller->route();
                         break;
+                    case 'movie':
+                        $controller = new MovieController();
+                        $controller->route();
+                        break;
                     default:
                         throw new \Exception("Le controleur n'existe pas");
                         break;

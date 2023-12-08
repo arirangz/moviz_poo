@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Db\Mysql;
 use App\Repository\UserRepository;
 
 class AuthController extends Controller
@@ -35,6 +36,8 @@ class AuthController extends Controller
     protected function login()
     {
         $errors = [];
+
+        
 
         if (isset($_POST['loginUser'])) {
 
